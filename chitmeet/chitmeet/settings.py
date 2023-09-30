@@ -31,6 +31,10 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    # Third-party apps
+    'channels',
+    'daphne',
+    # Default Apps
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -68,6 +72,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'chitmeet.wsgi.application'
+ASGI_APPLICATION = 'chitmeet.asgi.application'
 
 
 # Database
