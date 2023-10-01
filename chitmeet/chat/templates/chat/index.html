@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Application</title>
+    <style>
+        ul{
+            list-style: none;
+        }
+    </style>
+</head>
+<body>
+    <div id="chat">
+        <ul id="messages"></ul>
+        <div id="message">
+            <form method="post" id="chat-form">
+                {% csrf_token %}
+                <input type="text" name="message-input" id="message-input">
+                <button type="submit">Send</button>
+            </form>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reconnecting-websocket/1.0.0/reconnecting-websocket.min.js" integrity="sha512-B4skI5FiLurS86aioJx9VfozI1wjqrn6aTdJH+YQUmCZum/ZibPBTX55k5d9XM6EsKePDInkLVrN7vPmJxc1qA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+        if ( location.protocol == "https:")
+            protocol = "wss:";
+        else
+            protocol = "ws:";
+        const endpoint = protocol + "//" + location.host + location.pathname;
+        const ws = new ReconnectingWebSocket(endpoint)
+        
+        const form = document.querySelector("#chat-form");
+        const message_input = document.querySelector("#message-input");
+        const message_display = document.querySelector("#messages");
+
+        form.addEventListener(
+            "submit", (event) => {
+                event.preventDefault();
+                ws.send(message_input.value);
+                message_input.value = "";
+            })
+
+        ws.onopen =(event) => {
+            console.log("Connection Opened", event)
+        }
+        
+        ws.onmessage =(event) => {
+            console.log("message received", event);
+            message_display.innerHTML += '<li>'+event.data+'<li>';
+        }
+        
+        ws.onerror =(event) => {
+            console.log("Connection Error", event)
+        }
+        
+        ws.onclose =(event) => {
+            console.log("Connection Closed", event)
+        }
+    </script>
+</body>
+</html>
