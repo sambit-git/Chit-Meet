@@ -127,6 +127,14 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
+CHANNEL_LAYERS = {
+    "default" : {
+        "BACKEND" : "channels_redis.core.RedisChannelLayer",
+        "CONFIG" : {
+            "hosts" : [ ("localhost", 6379) ],
+        }
+    }
+}
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
